@@ -19,7 +19,7 @@ public class CategoriaService {
 		Categoria obj = repo.findById(id).orElse(null);
 		if (obj == null) {
 			
-			throw new ObjectNotFoundException("Objeto inexistente! Entrada: "+id+
+			throw new ObjectNotFoundException("Objeto inexistente! Id: "+id+
 				", Pacote: "+ Categoria.class.getName());
 		}
 		return obj;

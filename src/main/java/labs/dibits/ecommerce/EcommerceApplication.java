@@ -9,10 +9,15 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import labs.dibits.ecommerce.domain.Categoria;
 import labs.dibits.ecommerce.domain.Cidade;
+import labs.dibits.ecommerce.domain.Cliente;
+import labs.dibits.ecommerce.domain.Endereco;
 import labs.dibits.ecommerce.domain.Estado;
 import labs.dibits.ecommerce.domain.Produto;
+import labs.dibits.ecommerce.domain.enums.TipoCliente;
 import labs.dibits.ecommerce.repositories.CategoriaRepository;
 import labs.dibits.ecommerce.repositories.CidadeRepository;
+import labs.dibits.ecommerce.repositories.ClienteRepository;
+import labs.dibits.ecommerce.repositories.EnderecoRepository;
 import labs.dibits.ecommerce.repositories.EstadoRepository;
 import labs.dibits.ecommerce.repositories.ProdutoRepository;
 
@@ -22,11 +27,17 @@ public class EcommerceApplication implements CommandLineRunner {
 	@Autowired
 	private CategoriaRepository categoriaRepostory;
 	@Autowired
-	private ProdutoRepository produtoRepostory;
+	private ProdutoRepository produtoRepository;
 	@Autowired
-	private EstadoRepository estadoRepostory;
+	private EstadoRepository estadoRepository;
 	@Autowired
-	private CidadeRepository cidadeRepostory;
+	private CidadeRepository cidadeRepository;
+	@Autowired
+	private ClienteRepository clienteRepository;
+	@Autowired
+	private EnderecoRepository enderecoRepository;
+	
+	
 
 	public static void main(String[] args) {
 		SpringApplication.run(EcommerceApplication.class, args);
@@ -44,13 +55,16 @@ public class EcommerceApplication implements CommandLineRunner {
 		
 		Estado e1 = new Estado(null,"Minas Gerais");
 		Estado e2 = new Estado(null,"São Paulo");
+		Estado e3 = new Estado(null, "Goiás");
 		
 		Cidade c1 = new Cidade(null, "Uberlândia",e1);
 		Cidade c2 = new Cidade(null, "São Paulo",e2);
 		Cidade c3 = new Cidade(null, "Campinas",e2);
+		Cidade c4 = new Cidade(null, "Rio Quente",e3);
 		
 		e1.getCidades().addAll(Arrays.asList(c1));
 		e2.getCidades().addAll(Arrays.asList(c2, c3));
+		e3.getCidades().addAll(Arrays.asList(c4));
 		
 		cat1.getProdutos().addAll(Arrays.asList(p1,p2,p3));
 		cat2.getProdutos().addAll(Arrays.asList(p2));
@@ -62,9 +76,22 @@ public class EcommerceApplication implements CommandLineRunner {
 		
 
 		categoriaRepostory.saveAll(Arrays.asList(cat1, cat2));
-		produtoRepostory.saveAll(Arrays.asList(p1,p2,p3));
-		estadoRepostory.saveAll(Arrays.asList(e1,e2));
-		cidadeRepostory.saveAll(Arrays.asList(c1,c2,c3));
+		produtoRepository.saveAll(Arrays.asList(p1,p2,p3));
+		estadoRepository.saveAll(Arrays.asList(e1,e2,e3));
+		cidadeRepository.saveAll(Arrays.asList(c1,c2,c3,c4));
+		
+		Cliente cli1 = new Cliente(null, "Diogo Martins", "dibits.labs@gmail.com","02208937139" , TipoCliente.PESSOAFISICA);
+		cli1.getTelefones().addAll(Arrays.asList("64992768765","34998336599"));
+		
+		Endereco end1 = new Endereco(null, "Alameda dos Jaos", "2", "Qd 2 lt 1", "Fauna II", "75667000", cli1, c4);
+		Endereco end2 = new Endereco(null, "Avenida Brasil", "2115", "Apto 212", "Brasil", "38400718", cli1, c1);
+		
+		cli1.getEnderecos().addAll(Arrays.asList(end1, end2));
+		
+		clienteRepository.saveAll(Arrays.asList(cli1));
+		enderecoRepository.saveAll(Arrays.asList(end1, end2));
+		
+		
 	}
 
 }
