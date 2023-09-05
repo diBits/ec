@@ -13,6 +13,7 @@ import labs.dibits.ecommerce.domain.Cidade;
 import labs.dibits.ecommerce.domain.Cliente;
 import labs.dibits.ecommerce.domain.Endereco;
 import labs.dibits.ecommerce.domain.Estado;
+import labs.dibits.ecommerce.domain.ItemPedido;
 import labs.dibits.ecommerce.domain.Pagamento;
 import labs.dibits.ecommerce.domain.PagamentoComBoleto;
 import labs.dibits.ecommerce.domain.PagamentoComCartao;
@@ -25,6 +26,7 @@ import labs.dibits.ecommerce.repositories.CidadeRepository;
 import labs.dibits.ecommerce.repositories.ClienteRepository;
 import labs.dibits.ecommerce.repositories.EnderecoRepository;
 import labs.dibits.ecommerce.repositories.EstadoRepository;
+import labs.dibits.ecommerce.repositories.ItemPedidoRepository;
 import labs.dibits.ecommerce.repositories.PagamentoRepository;
 import labs.dibits.ecommerce.repositories.PedidoRepository;
 import labs.dibits.ecommerce.repositories.ProdutoRepository;
@@ -48,6 +50,8 @@ public class EcommerceApplication implements CommandLineRunner {
 	private PedidoRepository pedidoRepository;
 	@Autowired
 	private PagamentoRepository pagamentoRepository;
+	@Autowired
+	private ItemPedidoRepository itemPedidoRepository;
 	
 	
 
@@ -118,6 +122,19 @@ public class EcommerceApplication implements CommandLineRunner {
 		
 		pedidoRepository.saveAll(Arrays.asList(ped1,ped2));
 		pagamentoRepository.saveAll(Arrays.asList(pagto1, pagtot2));
+		
+		ItemPedido ip1 = new ItemPedido(ped1, p1, 0.00, 1, 2000.00);
+		ItemPedido ip2 = new ItemPedido(ped1, p3, 0.00, 2, 80.00);
+		ItemPedido ip3 = new ItemPedido(ped2, p2, 100.00, 1, 800.00);
+		
+		ped1.getItens().addAll(Arrays.asList(ip1, ip2));
+		ped2.getItens().addAll(Arrays.asList(ip3));
+		
+		p1.getItens().addAll(Arrays.asList(ip1));
+		p2.getItens().addAll(Arrays.asList(ip3));
+		p3.getItens().addAll(Arrays.asList(ip2));
+		
+		itemPedidoRepository.saveAll(Arrays.asList(ip1,ip2,ip3));
 		
 	}
 
