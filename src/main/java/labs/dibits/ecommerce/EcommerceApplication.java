@@ -1,5 +1,6 @@
 package labs.dibits.ecommerce;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,13 +13,20 @@ import labs.dibits.ecommerce.domain.Cidade;
 import labs.dibits.ecommerce.domain.Cliente;
 import labs.dibits.ecommerce.domain.Endereco;
 import labs.dibits.ecommerce.domain.Estado;
+import labs.dibits.ecommerce.domain.Pagamento;
+import labs.dibits.ecommerce.domain.PagamentoComBoleto;
+import labs.dibits.ecommerce.domain.PagamentoComCartao;
+import labs.dibits.ecommerce.domain.Pedido;
 import labs.dibits.ecommerce.domain.Produto;
+import labs.dibits.ecommerce.domain.enums.EstadoPagamento;
 import labs.dibits.ecommerce.domain.enums.TipoCliente;
 import labs.dibits.ecommerce.repositories.CategoriaRepository;
 import labs.dibits.ecommerce.repositories.CidadeRepository;
 import labs.dibits.ecommerce.repositories.ClienteRepository;
 import labs.dibits.ecommerce.repositories.EnderecoRepository;
 import labs.dibits.ecommerce.repositories.EstadoRepository;
+import labs.dibits.ecommerce.repositories.PagamentoRepository;
+import labs.dibits.ecommerce.repositories.PedidoRepository;
 import labs.dibits.ecommerce.repositories.ProdutoRepository;
 
 @SpringBootApplication
@@ -36,6 +44,10 @@ public class EcommerceApplication implements CommandLineRunner {
 	private ClienteRepository clienteRepository;
 	@Autowired
 	private EnderecoRepository enderecoRepository;
+	@Autowired
+	private PedidoRepository pedidoRepository;
+	@Autowired
+	private PagamentoRepository pagamentoRepository;
 	
 	
 
@@ -80,7 +92,7 @@ public class EcommerceApplication implements CommandLineRunner {
 		estadoRepository.saveAll(Arrays.asList(e1,e2,e3));
 		cidadeRepository.saveAll(Arrays.asList(c1,c2,c3,c4));
 		
-		Cliente cli1 = new Cliente(null, "Diogo Martins", "dibits.labs@gmail.com","02208937139" , TipoCliente.PESSOAFISICA);
+		Cliente cli1 = new Cliente(null, "Diogo Martins", "dibits.labs@gmail.com", "02208937139", TipoCliente.PESSOAFISICA);
 		cli1.getTelefones().addAll(Arrays.asList("64992768765","34998336599"));
 		
 		Endereco end1 = new Endereco(null, "Alameda dos Jaos", "2", "Qd 2 lt 1", "Fauna II", "75667000", cli1, c4);
@@ -91,6 +103,21 @@ public class EcommerceApplication implements CommandLineRunner {
 		clienteRepository.saveAll(Arrays.asList(cli1));
 		enderecoRepository.saveAll(Arrays.asList(end1, end2));
 		
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+		Pedido ped1 = new Pedido(null, sdf.parse("05/09/2023 10:25"), cli1, end1);
+		Pedido ped2 = new Pedido(null, sdf.parse("05/09/2023 18:00"), cli1, end2);
+		
+		Pagamento pagto1 = new PagamentoComCartao(null, EstadoPagamento.QUITADO, ped1, 6);
+		ped1.setPagamento(pagto1);
+		
+		Pagamento pagtot2 = new PagamentoComBoleto(null, EstadoPagamento.PENDENTE, ped2, sdf.parse("05/10/2023 00:00"), null);
+		ped2.setPagamento(pagtot2);
+		
+		cli1.getPedidos().addAll(Arrays.asList(ped1, ped2));
+		
+		pedidoRepository.saveAll(Arrays.asList(ped1,ped2));
+		pagamentoRepository.saveAll(Arrays.asList(pagto1, pagtot2));
 		
 	}
 
