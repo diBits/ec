@@ -3,7 +3,8 @@ package labs.dibits.ecommerce.domain.enums;
 public enum TipoCliente {
 
 	PESSOAFISICA(1, "Pessoa Física"),
-	PESSOAJURIDICA(2, "Pessoa Jurídica");
+	PESSOAJURIDICA(2, "Pessoa Jurídica"),
+	PCD(3, "Pessoa com Deficiencia");
 	
 	private int cod;
 	private String desc;

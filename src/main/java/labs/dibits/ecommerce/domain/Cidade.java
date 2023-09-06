@@ -3,8 +3,6 @@ package labs.dibits.ecommerce.domain;
 import java.io.Serializable;
 import java.util.Objects;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -36,7 +34,6 @@ public class Cidade implements Serializable{
 	 * armazenar o id do objeto da entidade Estado associado.
 	 */
 	
-	@JsonManagedReference
 	@ManyToOne
 	@JoinColumn(name = "estado_id")
 	private Estado estado;

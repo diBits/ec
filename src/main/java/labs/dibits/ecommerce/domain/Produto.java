@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Entity;
@@ -39,7 +38,7 @@ public class Produto implements Serializable{
 	 * armazena as chaves estrangeiras para Produto (produto_id) e Categoria (categoria_id).
 	 * A lista categorias armazena as instâncias de Categoria associadas a um Produto.
 	 */
-	@JsonBackReference
+	@JsonIgnore
 	@ManyToMany
 	@JoinTable(name = "PRODUTO_CATEGORIA",
 		joinColumns = @JoinColumn(name = "produto_id"),
